@@ -233,18 +233,7 @@ public class GraphicsDisplay extends JPanel {
         // Шаг 2 - Организовать цикл по всем точкам графика
         for (Double[] point : graphicsData) {
 
-//            boolean temp = true;
-            double znach = point[1];
-            //double cifr1 = znach % 10;
-            //znach /= 10;
-            //while (abs(znach) > 0) {
-              //  double cifr2 = znach % 10;
-                //znach /= 10;
-                //if (cifr1 < cifr2) {
-                 //   temp = false;
-                  //  break;
-                //}
-          //  }    
+            double znach = point[1];  
             double sum =  0;
           for (int i = 0; i < graphicsData.length; i++) {
         	  sum += graphicsData[i][1];
@@ -273,6 +262,7 @@ public class GraphicsDisplay extends JPanel {
 
     // Метод, обеспечивающий отображение осей координат
     protected void paintAxis(Graphics2D canvas) {
+        	
         // Установить особое начертание для осей
         canvas.setStroke(axisStroke);
         // Оси рисуются чёрным цветом
@@ -283,6 +273,11 @@ public class GraphicsDisplay extends JPanel {
         canvas.setFont(axisFont);
         // Создать объект контекста отображения текста - для получения характеристик устройства (экрана)
         FontRenderContext context = canvas.getFontRenderContext();
+        
+        Rectangle2D centerBounds = axisFont.getStringBounds("0", context);
+    	Point2D.Double centerLabelPos = xyToPoint(0, 0);
+    	canvas.drawString("0", (float)centerLabelPos.getX() + 10,
+    	(float)(centerLabelPos.getY() - centerBounds.getY()));  	
         // Определить, должна ли быть видна ось Y на графике
         if (minX <= 0.0 && maxX >= 0.0) {
             // Она должна быть видна, если левая граница показываемой области (minX) <= 0.0, а правая (maxX) >= 0.0
