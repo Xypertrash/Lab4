@@ -1,6 +1,7 @@
 package bsu.rfe.java.group6.yakusik.var12a;
 
 import java.awt.BasicStroke;
+import static java.lang.Math.abs;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -8,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.font.FontRenderContext;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -231,23 +233,39 @@ public class GraphicsDisplay extends JPanel {
 
         // Шаг 2 - Организовать цикл по всем точкам графика
         for (Double[] point : graphicsData) {
-            if (isFuncValueBigger(point)) {
-                Point2D.Double center = xyToPoint(point[0], point[1]);
-                GeneralPath path = new GeneralPath();
-                path.moveTo(center.x + 0, center.y + 5);
-                path.lineTo(center.x + 0, center.y - 5);
-                path.lineTo(center.x + 0, center.y + 0);
-                path.lineTo(center.x - 5, center.y + 0);
-                path.lineTo(center.x + 5, center.y + 0);
-                path.lineTo(center.x - 4, center.y + 1);
-                path.lineTo(center.x + 0, center.y + 0);
-                path.lineTo(center.x + 5, center.y + 5);
-                path.lineTo(center.x - 5, center.y - 5);
-                path.lineTo(center.x + 0, center.y + 0);
-                path.lineTo(center.x - 5, center.y + 5);
-                path.lineTo(center.x + 5, center.y - 5);
-                canvas.draw(path);
+
+            boolean temp = true;
+            double znach = point[1];
+            double cifr1 = znach % 10;
+            znach /= 10;
+            while (abs(znach) > 0) {
+                double cifr2 = znach % 10;
+                znach /= 10;
+                if (cifr1 < cifr2) {
+                    temp = false;
+                    break;
+                }
+
             }
+            if (!temp) {
+                // Выбрать красный цвета для контуров маркеров
+                canvas.setColor(Color.RED);
+                // Выбрать красный цвет для закрашивания маркеров внутри
+                canvas.setPaint(Color.RED);
+            } else {
+                // Выбрать красный цвета для контуров маркеров
+                canvas.setColor(Color.RED);
+                // Выбрать красный цвет для закрашивания маркеров внутри
+                canvas.setPaint(Color.RED);
+            }
+            canvas.setStroke(markerStroke);
+            GeneralPath path = new GeneralPath();
+            Point2D.Double center = xyToPoint(point[0], point[1]);
+            canvas.draw(new Line2D.Double(shiftPoint(center, -8, 0), shiftPoint(center, 8, 0)));
+            canvas.draw(new Line2D.Double(shiftPoint(center, 0, 8), shiftPoint(center, 0, -8)));
+            canvas.draw(new Line2D.Double(shiftPoint(center, 8, 8), shiftPoint(center, -8, -8)));
+            canvas.draw(new Line2D.Double(shiftPoint(center, -8, 8), shiftPoint(center, 8, -8)));
+            Point2D.Double corner = shiftPoint(center, 3, 3);        
         }
     }
 
