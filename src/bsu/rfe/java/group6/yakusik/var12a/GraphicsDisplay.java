@@ -9,7 +9,6 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.font.FontRenderContext;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -234,29 +233,33 @@ public class GraphicsDisplay extends JPanel {
         // Шаг 2 - Организовать цикл по всем точкам графика
         for (Double[] point : graphicsData) {
 
-            boolean temp = true;
+//            boolean temp = true;
             double znach = point[1];
-            double cifr1 = znach % 10;
-            znach /= 10;
-            while (abs(znach) > 0) {
-                double cifr2 = znach % 10;
-                znach /= 10;
-                if (cifr1 < cifr2) {
-                    temp = false;
-                    break;
-                }
-
-            }
-            if (!temp) {
+            //double cifr1 = znach % 10;
+            //znach /= 10;
+            //while (abs(znach) > 0) {
+              //  double cifr2 = znach % 10;
+                //znach /= 10;
+                //if (cifr1 < cifr2) {
+                 //   temp = false;
+                  //  break;
+                //}
+          //  }    
+            double sum =  0;
+          for (int i = 0; i < graphicsData.length; i++) {
+        	  sum += graphicsData[i][1];
+          }          
+          double avg = (sum/graphicsData.length);
+            if (znach > (avg/2)) {
                 // Выбрать красный цвета для контуров маркеров
                 canvas.setColor(Color.RED);
                 // Выбрать красный цвет для закрашивания маркеров внутри
                 canvas.setPaint(Color.RED);
             } else {
                 // Выбрать красный цвета для контуров маркеров
-                canvas.setColor(Color.RED);
+                canvas.setColor(Color.BLUE);
                 // Выбрать красный цвет для закрашивания маркеров внутри
-                canvas.setPaint(Color.RED);
+                canvas.setPaint(Color.BLUE);
             }
             canvas.setStroke(markerStroke);
             GeneralPath path = new GeneralPath();
@@ -264,8 +267,7 @@ public class GraphicsDisplay extends JPanel {
             canvas.draw(new Line2D.Double(shiftPoint(center, -8, 0), shiftPoint(center, 8, 0)));
             canvas.draw(new Line2D.Double(shiftPoint(center, 0, 8), shiftPoint(center, 0, -8)));
             canvas.draw(new Line2D.Double(shiftPoint(center, 8, 8), shiftPoint(center, -8, -8)));
-            canvas.draw(new Line2D.Double(shiftPoint(center, -8, 8), shiftPoint(center, 8, -8)));
-            Point2D.Double corner = shiftPoint(center, 3, 3);        
+            canvas.draw(new Line2D.Double(shiftPoint(center, -8, 8), shiftPoint(center, 8, -8)));        
         }
     }
 
